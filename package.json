@@ -5,7 +5,9 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build"
   },
   "repository": {
     "type": "git",
