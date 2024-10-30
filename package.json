@@ -4,6 +4,7 @@
   "description": "Gympass style app",
   "main": "server.ts",
   "scripts": {
+    "dev": "tsx watch ./src/server.ts",
     "test": "vitest"
   },
   "repository": {
@@ -26,5 +27,8 @@
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "fastify": "^5.0.0"
   }
 }
