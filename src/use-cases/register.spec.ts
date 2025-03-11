@@ -2,6 +2,7 @@ import { compare } from 'bcrypt';
 import { RegisterUseCase } from './register';
 import { describe, expect, it } from 'vitest';
 import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository';
+import { UserAlreadyExistsError } from './errors/user-already-exists-error';
 
 describe('Register use case', () => {
   it('should create a new user', async () => {
@@ -21,8 +22,25 @@ describe('Register use case', () => {
     expect(userRegisterReponse.user.email).toBe(email);
   });
 
-  it.skip('should not be able to create a new user with an existing email', async () => {
-    // TODO: implement this test
+  it('should not be able to create a new user with an existing email', async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const registerUseCase = new RegisterUseCase(usersRepository);
+
+    const email = 'donlotario@email.com';
+
+    await registerUseCase.execute({
+      name: 'Don Lotario',
+      email,
+      password: 'my-password',
+    });
+
+    expect(async () => {
+      await registerUseCase.execute({
+        name: 'Don Lotario',
+        email,
+        password: 'my-password2',
+      });
+    }).rejects.toBeInstanceOf(UserAlreadyExistsError);
   });
 
   it('should hash the password', async () => {
