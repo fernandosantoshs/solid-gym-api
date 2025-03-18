@@ -3,22 +3,27 @@ import { describe, it, expect } from 'vitest';
 import { AuthenticationUseCase } from './authentication';
 import { hash } from 'bcrypt';
 import { invalidCredentialsError } from './errors/invalid-credentials-error';
-// it should be able to authenticate [x]
-// it should not be able to authenticate with wrong email [x]
-// it should not be able to authenticate with wrong password []
+import { beforeEach } from 'vitest';
+import { UsersRepository } from '@/repositories/users-repository';
+
+let usersRepository: UsersRepository;
+let sut: AuthenticationUseCase;
 
 describe('Authentication use cases', () => {
-  it('should be able to authenticate', async () => {
-    const usersRepository = new InMemoryUsersRepository();
-    const authenticationUseCase = new AuthenticationUseCase(usersRepository);
+  beforeEach(() => {
+    usersRepository = new InMemoryUsersRepository();
+    sut = new AuthenticationUseCase(usersRepository);
+    // System Under Test: Authentication use case
+  });
 
+  it('should be able to authenticate', async () => {
     await usersRepository.create({
       name: 'Don Lotario',
       email: 'donlotario@email.com',
       password_hash: await hash('mypassword', 6),
     });
 
-    const { user } = await authenticationUseCase.authenticate({
+    const { user } = await sut.authenticate({
       email: 'donlotario@email.com',
       password: 'mypassword',
     });
@@ -27,9 +32,6 @@ describe('Authentication use cases', () => {
   });
 
   it('should not be able to authenticate with wrong email', async () => {
-    const usersRepository = new InMemoryUsersRepository();
-    const authenticationUseCase = new AuthenticationUseCase(usersRepository);
-
     await usersRepository.create({
       name: 'Don Lotario',
       email: 'donlotario@email.com',
@@ -37,9 +39,26 @@ describe('Authentication use cases', () => {
     });
 
     await expect(async () => {
-      await authenticationUseCase.authenticate({
+      await sut.authenticate({
         email: 'wrongEmail@email.com',
         password: 'mypassword',
+      });
+    }).rejects.toBeInstanceOf(invalidCredentialsError);
+  });
+
+  it('should not be able to authenticate with wrong password', async () => {
+    const email = 'donlotario@email.com';
+
+    await usersRepository.create({
+      name: 'Don Lotario',
+      email,
+      password_hash: await hash('mypassword', 6),
+    });
+
+    expect(async () => {
+      await sut.authenticate({
+        email,
+        password: 'wrongPassword',
       });
     }).rejects.toBeInstanceOf(invalidCredentialsError);
   });
