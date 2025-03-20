@@ -1,3 +1,4 @@
+import { makeAuthenticationUseCase } from '@/factories/make-authentication-use-case';
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository';
 import { AuthenticationUseCase } from '@/use-cases/authentication';
 import { invalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error';
@@ -16,8 +17,7 @@ export async function authentication(
   const { email, password } = authenticationBodySchema.parse(request.body);
 
   try {
-    const usersRepository = new PrismaUsersRepository();
-    const authenticationUseCase = new AuthenticationUseCase(usersRepository);
+    const authenticationUseCase = makeAuthenticationUseCase();
 
     await authenticationUseCase.authenticate({ email, password });
   } catch (err) {
