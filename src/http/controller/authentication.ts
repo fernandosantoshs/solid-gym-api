@@ -1,6 +1,4 @@
 import { makeAuthenticationUseCase } from '@/factories/make-authentication-use-case';
-import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository';
-import { AuthenticationUseCase } from '@/use-cases/authentication';
 import { invalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
