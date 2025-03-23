@@ -55,7 +55,7 @@ describe('Authentication use cases', () => {
       password_hash: await hash('mypassword', 6),
     });
 
-    expect(async () => {
+    await expect(async () => {
       await sut.authenticate({
         email,
         password: 'wrongPassword',
