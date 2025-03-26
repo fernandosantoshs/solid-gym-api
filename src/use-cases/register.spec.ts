@@ -38,7 +38,7 @@ describe('Register use case', () => {
     });
 
     await expect(async () => {
-      await sut.execute({
+      sut.execute({
         name: 'Don Lotario',
         email,
         password: 'my-password2',

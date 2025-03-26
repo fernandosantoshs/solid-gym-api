@@ -39,7 +39,7 @@ describe('Authentication use cases', () => {
     });
 
     await expect(async () => {
-      await sut.authenticate({
+      sut.authenticate({
         email: 'wrongEmail@email.com',
         password: 'mypassword',
       });
@@ -56,7 +56,7 @@ describe('Authentication use cases', () => {
     });
 
     await expect(async () => {
-      await sut.authenticate({
+      sut.authenticate({
         email,
         password: 'wrongPassword',
       });
