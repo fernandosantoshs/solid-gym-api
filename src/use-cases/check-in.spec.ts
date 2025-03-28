@@ -19,4 +19,18 @@ describe('Check-in use case', () => {
 
     expect(checkIn.id).toEqual(expect.any(String));
   });
+
+  it('should not be able to check in twice in the same day', async () => {
+    await sut.execute({
+      userId: 'user-01',
+      gymId: 'gym-01',
+    });
+
+    await expect(async () => {
+      await sut.execute({
+        userId: 'user-01',
+        gymId: 'gym-01',
+      });
+    }).rejects.toBeInstanceOf(Error);
+  });
 });

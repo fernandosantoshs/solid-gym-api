@@ -25,7 +25,7 @@ describe('Get user profile tests', () => {
     const sut = new GetUserProfileUseCase(usersRepository);
 
     await expect(async () => {
-      sut.execute({ userId: 'non-existing-id' });
+      await sut.execute({ userId: 'non-existing-id' });
     }).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
 });
