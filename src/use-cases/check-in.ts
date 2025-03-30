@@ -18,7 +18,7 @@ export class CheckInUseCase {
     userId,
   }: CheckInUseCaseRequest): Promise<CheckInUseCaseResponse> {
     const userCheckedInOnTheSameDay =
-      await this.checkInsRepository.findCheckInByUserOnTheSameDate(
+      await this.checkInsRepository.findCheckInByUserIdOnDate(
         userId,
         new Date()
       );
