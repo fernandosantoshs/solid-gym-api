@@ -42,20 +42,21 @@ describe('Check-in use case', () => {
     }).rejects.toBeInstanceOf(Error);
   });
 
-  it.skip('should be able to check in twice but in different days', async () => {
-    const testDate = new Date(2025, 0, 1, 8, 0, 0);
-    vi.setSystemTime(testDate);
+  it('should be able to check in twice but in different days', async () => {
+    vi.setSystemTime(new Date(2025, 0, 1, 8, 0, 0)); // Jan 1, 2025
 
     await sut.execute({
       userId: 'user-01',
       gymId: 'gym-01',
     });
 
-    const checkIn = await sut.execute({
+    vi.setSystemTime(new Date(2025, 0, 2, 8, 0, 0)); // Jan 2, 2025
+
+    const { checkIn } = await sut.execute({
       userId: 'user-01',
       gymId: 'gym-01',
     });
 
-    expect(checkIn).toHaveProperty('id');
+    expect(checkIn.id).toEqual(expect.any(String));
   });
 });
