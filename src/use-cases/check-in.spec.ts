@@ -15,7 +15,7 @@ describe('Check-in use case', () => {
     sut = new CheckInUseCase(checkInsRepository, gymsRepository);
 
     gymsRepository.items.push({
-      id: 'id-01',
+      id: 'gym-01',
       title: 'NodeJs Gym',
       description: '',
       phone: '9999999',
@@ -83,16 +83,25 @@ describe('Check-in use case', () => {
     expect(checkIn.id).toEqual(expect.any(String));
   });
 
-  it.skip('should not be able to check in when user is more than 100m away from the gym', async () => {
-    // TODO: Complete this test
-
-    const { checkIn } = await sut.execute({
-      userId: 'user-01',
-      gymId: 'gym-01',
-      userLatitude: -8.0493472,
-      userLongitude: -34.8783069,
+  it('should not be able to check in when distant from the gym', async () => {
+    gymsRepository.items.push({
+      id: 'gym-02',
+      title: 'Too far to check in',
+      description: '',
+      phone: '9999999',
+      latitude: new Decimal(-8.0493472),
+      longitude: new Decimal(-34.8783069),
     });
 
-    expect(checkIn.id).toEqual(expect.any(String));
+    //-8.0505422,-34.8835217
+
+    await expect(() => {
+      return sut.execute({
+        userId: 'user-01',
+        gymId: 'gym-02',
+        userLatitude: -8.0505422,
+        userLongitude: -34.8835217,
+      });
+    }).rejects.toBeInstanceOf(Error);
   });
 });
