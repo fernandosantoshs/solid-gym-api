@@ -2,6 +2,8 @@ import { InMemoryCheckInsRespository } from '@/repositories/in-memory/in-memory-
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { CheckInUseCase } from './check-in';
 import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repositories';
+import { MaxNumberOfCheckInsError } from './errors/max-number-of-check-ins-error';
+import { MaxDistanceError } from './errors/max-distance-error';
 
 let checkInsRepository: InMemoryCheckInsRespository;
 let gymsRepository: InMemoryGymsRepository;
@@ -57,7 +59,7 @@ describe('Check-in use case', () => {
         userLatitude: -8.0493472,
         userLongitude: -34.8783069,
       });
-    }).rejects.toBeInstanceOf(Error);
+    }).rejects.toBeInstanceOf(MaxNumberOfCheckInsError);
   });
 
   it('should be able to check in twice but in different days', async () => {
@@ -99,6 +101,6 @@ describe('Check-in use case', () => {
         userLatitude: -8.0505422,
         userLongitude: -34.8835217,
       });
-    }).rejects.toBeInstanceOf(Error);
+    }).rejects.toBeInstanceOf(MaxDistanceError);
   });
 });
