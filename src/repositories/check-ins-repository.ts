@@ -8,5 +8,5 @@ export interface CheckInsRepository {
     date: Date
   ): Promise<CheckIn | null>;
 
-  findManyCheckInsByUserId(userId: string): Promise<CheckIn[]>;
+  findManyCheckInsByUserId(userId: string, page: number): Promise<CheckIn[]>;
 }
