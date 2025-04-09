@@ -36,4 +36,25 @@ describe('Search gyms use case', () => {
       expect.objectContaining({ title: 'Typescript Gym' }),
     ]);
   });
+
+  it('should be able to search gym with paginated results', async () => {
+    for (let i = 1; i <= 22; i++) {
+      await gymsRepository.create({
+        title: `Typescript Gym ${i}`,
+        description: '',
+        phone: '9999999',
+        latitude: -8.0493472,
+        longitude: -34.8783069,
+      });
+    }
+
+    const search = await sut.execute({ query: 'Typescript Gym', page: 2 });
+
+    expect(search.gyms).toHaveLength(2);
+
+    expect(search.gyms).toEqual([
+      expect.objectContaining({ title: 'Typescript Gym 21' }),
+      expect.objectContaining({ title: 'Typescript Gym 22' }),
+    ]);
+  });
 });
