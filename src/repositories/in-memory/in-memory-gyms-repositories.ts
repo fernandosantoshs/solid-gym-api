@@ -1,7 +1,8 @@
 import { Gym, Prisma } from '@prisma/client';
-import { GymsRepository } from '../gyms-repository';
+import { FetchNearbyGymsParams, GymsRepository } from '../gyms-repository';
 import { Decimal } from '@prisma/client/runtime/library';
 import { randomUUID } from 'crypto';
+import { calculateDistanceBetweenCoordinates } from '@/utils/get-distance-between-coodinates';
 
 export class InMemoryGymsRepository implements GymsRepository {
   public items: Gym[] = [];
@@ -16,7 +17,7 @@ export class InMemoryGymsRepository implements GymsRepository {
     return gym;
   }
 
-  async create(data: Prisma.GymCreateInput): Promise<Gym> {
+  async create(data: Prisma.GymCreateInput) {
     const gym = {
       id: data.id ?? randomUUID(),
       title: data.title,
@@ -32,7 +33,23 @@ export class InMemoryGymsRepository implements GymsRepository {
     return gym;
   }
 
-  async searchMany(query: string, page: number): Promise<Gym[]> {
+  async searchManyNearby({ latitude, longitude }: FetchNearbyGymsParams) {
+    const gyms = this.items.filter((gym) => {
+      const distance = calculateDistanceBetweenCoordinates(
+        { latitude, longitude },
+        {
+          latitude: gym.latitude.toNumber(),
+          longitude: gym.longitude.toNumber(),
+        }
+      );
+
+      return distance <= 10; // Kilometers
+    });
+
+    return gyms;
+  }
+
+  async searchMany(query: string, page: number) {
     const gyms = this.items
       .filter((gym) => gym.title.toUpperCase().includes(query.toUpperCase()))
       .slice((page - 1) * 20, page * 20);
