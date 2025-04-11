@@ -16,8 +16,12 @@ export class InMemoryCheckInsRespository implements CheckInsRepository {
     return checkIn;
   }
 
-  save(checkIn: CheckIn): Promise<CheckIn> {
-    throw new Error('Method not implemented.');
+  async save(checkIn: CheckIn): Promise<CheckIn> {
+    const checkInIndex = this.items.findIndex((item) => checkIn.id === item.id);
+
+    this.items[checkInIndex] = checkIn;
+
+    return checkIn;
   }
 
   async create(data: Prisma.CheckInUncheckedCreateInput) {
