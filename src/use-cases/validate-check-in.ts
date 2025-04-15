@@ -2,6 +2,7 @@ import { CheckInsRepository } from '@/repositories/check-ins-repository';
 import { CheckIn } from '@prisma/client';
 import { ResourceNotFoundError } from './errors/resource-not-found-error';
 import dayjs from 'dayjs';
+import { ExpiredCheckInValidationError } from './errors/expired-check-in-validation-error';
 
 interface ValidateCheckInUseCaseRequest {
   id: string;
@@ -29,7 +30,7 @@ export class ValidateCheckInUseCase {
     );
 
     if (diffBetweenCheckInAndValidation > 20) {
-      throw new Error();
+      throw new ExpiredCheckInValidationError();
     }
 
     checkIn.validated_at = new Date();
