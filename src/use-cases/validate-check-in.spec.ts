@@ -49,7 +49,9 @@ describe('Validate Check in Use Case', () => {
       created_at: new Date(),
     });
 
-    vi.setSystemTime(new Date(2025, 0, 1, 8, 22, 0));
+    const twentyOneMinutesInMs = 1000 * 60 * 21;
+
+    vi.advanceTimersByTime(twentyOneMinutesInMs);
 
     await expect(async () => {
       return await sut.execute({ id: checkIn.id });

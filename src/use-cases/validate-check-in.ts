@@ -29,7 +29,9 @@ export class ValidateCheckInUseCase {
       'minutes'
     );
 
-    if (diffBetweenCheckInAndValidation > 20) {
+    const maxTimeToValidateCheckInInMinutes = 20;
+
+    if (diffBetweenCheckInAndValidation > maxTimeToValidateCheckInInMinutes) {
       throw new ExpiredCheckInValidationError();
     }
 
