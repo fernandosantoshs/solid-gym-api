@@ -40,17 +40,21 @@ export class PrismaCheckInsRepository implements CheckInsRepository {
   }
 
   async countCheckInsByUserId(userId: string) {
-    throw new Error('Method not implemented.');
+    const checkInsCount = await prisma.checkIn.count({
+      where: { user_id: userId },
+    });
+
+    return checkInsCount;
   }
 
   async save(data: CheckIn) {
-    const updatedCheckIn = await prisma.checkIn.update({
+    const checkIn = await prisma.checkIn.update({
       where: {
         id: data.id,
       },
       data,
     });
 
-    return updatedCheckIn;
+    return checkIn;
   }
 }
