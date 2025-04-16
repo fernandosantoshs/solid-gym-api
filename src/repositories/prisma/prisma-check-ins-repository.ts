@@ -43,7 +43,14 @@ export class PrismaCheckInsRepository implements CheckInsRepository {
     throw new Error('Method not implemented.');
   }
 
-  async save(checkIn: CheckIn) {
-    throw new Error('Method not implemented.');
+  async save(data: CheckIn) {
+    const updatedCheckIn = await prisma.checkIn.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    });
+
+    return updatedCheckIn;
   }
 }
