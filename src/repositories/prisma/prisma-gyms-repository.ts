@@ -21,7 +21,9 @@ export class PrismaGymsRepository implements GymsRepository {
     latitude,
     longitude,
   }: FetchNearbyGymsParams): Promise<Gym[]> {
-    const gyms = await prisma.$queryRaw<Gym[]>`SELECT * from gym`;
+    const gyms = await prisma.$queryRaw<
+      Gym[]
+    >`SELECT * from gym WHERE ( 6371 * acos( cos( radians(${latitude}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(${longitude}) ) + sin( radians(${latitude}) ) * sin( radians( latitude ) ) ) ) <= 10`;
 
     return gyms;
   }
