@@ -3,12 +3,27 @@ import { FetchNearbyGymsParams, GymsRepository } from '../gyms-repository';
 import { prisma } from '@/lib/prisma';
 
 export class PrismaGymsRepository implements GymsRepository {
-  searchMany(query: string, page: number): Promise<Gym[]> {
-    throw new Error('Method not implemented.');
+  async searchMany(query: string, page: number) {
+    const gyms = await prisma.gym.findMany({
+      where: {
+        title: {
+          contains: query,
+        },
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    });
+
+    return gyms;
   }
 
-  searchManyNearby(params: FetchNearbyGymsParams): Promise<Gym[]> {
-    throw new Error('Method not implemented.');
+  async searchManyNearby({
+    latitude,
+    longitude,
+  }: FetchNearbyGymsParams): Promise<Gym[]> {
+    const gyms = await prisma.$queryRaw<Gym[]>`SELECT * from gym`;
+
+    return gyms;
   }
 
   async findById(id: string) {
@@ -21,7 +36,9 @@ export class PrismaGymsRepository implements GymsRepository {
     return gym;
   }
 
-  create(data: Prisma.GymCreateInput): Promise<Gym> {
-    throw new Error('Method not implemented.');
+  async create(data: Prisma.GymCreateInput) {
+    const gym = await prisma.gym.create({ data });
+
+    return gym;
   }
 }
