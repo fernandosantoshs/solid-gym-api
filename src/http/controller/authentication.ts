@@ -17,7 +17,21 @@ export async function authentication(
   try {
     const authenticationUseCase = makeAuthenticationUseCase();
 
-    await authenticationUseCase.authenticate({ email, password });
+    const { user } = await authenticationUseCase.authenticate({
+      email,
+      password,
+    });
+
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: user.id,
+        },
+      }
+    );
+
+    return reply.status(200).send({ token });
   } catch (err) {
     if (err instanceof invalidCredentialsError) {
       return reply.status(400).send({ message: err.message });
@@ -25,6 +39,4 @@ export async function authentication(
 
     throw err;
   }
-
-  return reply.status(200).send();
 }
