@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { execSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import type { Environment } from 'vitest/environments';
 
@@ -10,6 +11,8 @@ function generateDatabaseURL(schema: string) {
   const databaseUrl = new URL(process.env.DATABASE_URL);
 
   databaseUrl.searchParams.set('schema', schema);
+
+  return databaseUrl.toString();
 }
 
 export default <Environment>{
@@ -17,8 +20,13 @@ export default <Environment>{
   transformMode: 'ssr',
 
   async setup() {
-    // Criar o banco de testes
     const schema = randomUUID();
+    const databaseUrl = generateDatabaseURL(schema);
+
+    process.env.DATABASE_URL = databaseUrl;
+
+    execSync('npx prisma migrate deploy');
+
     return {
       async teardown() {
         // Apagar o banco de testes
