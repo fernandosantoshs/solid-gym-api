@@ -5,8 +5,10 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
-    "test": "vitest run",
-    "test:watch": "vitest run --watch",
+    "test": "vitest run --project unit",
+    "test:e2e": "vitest run --project e2e",
+    "test:watch": "vitest --project unit",
+    "test:e2e:watch": "vitest --project e2e",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "start": "node build/server.js",
