@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/prisma';
 import 'dotenv/config';
 import { execSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
@@ -29,7 +30,11 @@ export default <Environment>{
 
     return {
       async teardown() {
-        // Apagar o banco de testes
+        await prisma.$executeRawUnsafe(
+          `DROP SCHEMA IF EXISTS "${schema}" CASCADE`
+        );
+
+        await prisma.$disconnect();
       },
     };
   },
