@@ -1,3 +1,5 @@
+// @vitest-enviroment prisma
+
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -19,7 +21,7 @@ export default defineConfig({
           name: 'e2e',
           dir: 'src/http/controllers',
           environment:
-            './prisma/vitest-prisma-environment/prisma-test-environment.ts',
+            './prisma/vitest-environment-prisma/prisma-test-environment.ts',
         },
       },
     ],
