@@ -1,7 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { app } from '@/app';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
-describe('E2E test', () => {
-  it('should work', () => {
-    expect(1 + 1).toEqual(2);
+describe('Register E2E tests', () => {
+  beforeAll(async () => {
+    await app.ready();
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('should be able to register', async () => {});
 });
