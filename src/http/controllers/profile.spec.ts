@@ -1,7 +1,6 @@
 import { app } from '@/app';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
-import { string } from 'zod';
 
 describe('Get user profile (E2E)', async () => {
   beforeAll(async () => {
