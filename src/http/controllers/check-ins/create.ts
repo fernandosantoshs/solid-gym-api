@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
-  const gymIdQuerySchema = z.object({
+  const createCheckInParamsSchema = z.object({
     gymId: z.string().uuid(),
   });
 
@@ -16,9 +16,9 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     }),
   });
 
-  const { latitude, longitude } = createCheckInQuerySchema.parse(request.query);
+  const { latitude, longitude } = createCheckInQuerySchema.parse(request.body);
 
-  const { gymId } = gymIdQuerySchema.parse(request.params);
+  const { gymId } = createCheckInParamsSchema.parse(request.params);
 
   const createCheckInUseCase = makeCheckInUseCase();
 
