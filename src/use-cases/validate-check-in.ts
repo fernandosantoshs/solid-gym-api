@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { ExpiredCheckInValidationError } from './errors/expired-check-in-validation-error';
 
 interface ValidateCheckInUseCaseRequest {
-  id: string;
+  checkInId: string;
 }
 
 interface ValidateCheckInUseCaseResponse {
@@ -16,9 +16,9 @@ export class ValidateCheckInUseCase {
   constructor(private checkInsRepository: CheckInsRepository) {}
 
   async execute({
-    id,
+    checkInId,
   }: ValidateCheckInUseCaseRequest): Promise<ValidateCheckInUseCaseResponse> {
-    const checkIn = await this.checkInsRepository.findById(id);
+    const checkIn = await this.checkInsRepository.findById(checkInId);
 
     if (!checkIn) {
       throw new ResourceNotFoundError();

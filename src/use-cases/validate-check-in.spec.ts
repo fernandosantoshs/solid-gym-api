@@ -24,7 +24,7 @@ describe('Validate Check in Use Case', () => {
       gym_id: 'gym-01',
     });
 
-    await sut.execute({ id: checkIn.id });
+    await sut.execute({ checkInId: checkIn.id });
 
     expect(checkIn).toEqual(
       expect.objectContaining({
@@ -36,7 +36,7 @@ describe('Validate Check in Use Case', () => {
 
   it('should not be able to validate inexistent check-in', async () => {
     await expect(async () => {
-      return sut.execute({ id: 'invalid-id' });
+      return sut.execute({ checkInId: 'invalid-id' });
     }).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
 
@@ -54,7 +54,7 @@ describe('Validate Check in Use Case', () => {
     vi.advanceTimersByTime(twentyOneMinutesInMs);
 
     await expect(async () => {
-      return await sut.execute({ id: checkIn.id });
+      return await sut.execute({ checkInId: checkIn.id });
     }).rejects.toBeInstanceOf(Error);
   });
 });
