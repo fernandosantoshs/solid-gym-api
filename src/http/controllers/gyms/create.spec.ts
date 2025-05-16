@@ -19,9 +19,9 @@ describe('Create Gym (E2E)', () => {
       .post('/gyms')
       .auth(token, { type: 'bearer' })
       .send({
-        title: 'Iron fist gym',
-        description: 'Get iron fists!',
-        phone: '9999999',
+        title: 'Typescript gym',
+        description: 'Get big in Typescript!',
+        phone: '55819999999',
         latitude: -8.0493472,
         longitude: -34.8783069,
       });
